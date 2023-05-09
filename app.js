@@ -39,6 +39,7 @@ app.listen(port, ()=> {
 // deklarasi routes
 const produkRoutes = require('./routes/produk.router');
 const kategoriRoutes = require('./routes/kategori.router');
+const pembeliRoutes = require('./routes/pembeli.router');
 
 // deklarasi file .env
 const api = process.env.API_URL;
@@ -46,3 +47,4 @@ const api = process.env.API_URL;
 // deklarasi router express
 app.use(`${api}/produk`, produkRoutes);
 app.use(`${api}/kategori`, kategoriRoutes);
+app.use(`${api}/pembeli`, pembeliRoutes);
