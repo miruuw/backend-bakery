@@ -2,21 +2,32 @@ const mongoose = require('mongoose');
 
 // deklarasi schema database konfirmasi
 const konfirmasiPembayaran = mongoose.Schema({
-    asal_rekening: {
-        type: String,
-        require: true
+    order: {
+        type: Schema.Types.ObjectId,
+        ref: 'Order',
+        required: true
     },
-    tujuan_rekening: {
+    paymentMethod: {
         type: String,
-        require: true
+        enum: ['credit card', 'paypal', 'bank transfer'],
+        required: true
     },
-    jumlah_transfer: {
+    paymentDate: {
+        type: Date,
+        required: true
+    },
+    amount: {
         type: Number,
-        default: 0
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ['pending', 'confirmed'],
+        default: 'pending'
     }
 })
 
-konfirmasiPembayaran.virtual('id').get(function(){
+konfirmasiPembayaran.virtual('id').get(function () {
     return this._id.toHexString();
 });
 

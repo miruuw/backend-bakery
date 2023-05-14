@@ -2,22 +2,29 @@ const mongoose = require('mongoose');
 
 // deklarasi schema database produk
 const produkSchema = mongoose.Schema({
-    nama: {
+    name: {
         type: String,
-        require: true
+        required: true
     },
-    harga: {
+    price: {
         type: Number,
-        default: 0
+        required: true
     },
-    kategori: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Kategori',
-        require: true
+    description: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })
 
-produkSchema.virtual('id').get(function(){
+produkSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 

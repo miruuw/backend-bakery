@@ -2,19 +2,26 @@ const mongoose = require('mongoose');
 
 // deklarasi detail order
 const detailOrderSchema = mongoose.Schema({
-    jumlah_beli: {
-        type: Number,
-        required: true,
-        min: 0,
-        max: 255
+    order: {
+        type: Schema.Types.ObjectId,
+        ref: 'Order',
+        required: true
     },
-    subtotal: {
+    item: {
+        type: String,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    },
+    price: {
         type: Number,
         required: true
     }
 })
 
-detailOrderSchema.virtual('id').get(function(){
+detailOrderSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 

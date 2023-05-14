@@ -2,29 +2,30 @@ const mongoose = require('mongoose');
 
 // deklarasi schema database produk
 const pembeliSchema = mongoose.Schema({
-    nama: {
-        type: String,
-        require: true
-    },
-    alamat: {
-        type: String,
-        default: ""
-    },
-    telepon: {
-        type: String,
-        default: ""
-    },
-    username: {
-        type: String,
-        require: true
-    },
-    passwordHash: {
+    name: {
         type: String,
         required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     }
 })
 
-pembeliSchema.virtual('id').get(function(){
+pembeliSchema.virtual('id').get(function () {
     return this._id.toHexString();
 });
 
