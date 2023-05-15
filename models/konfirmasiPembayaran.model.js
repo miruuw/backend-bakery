@@ -2,37 +2,33 @@ const mongoose = require('mongoose');
 
 // deklarasi schema database konfirmasi
 const konfirmasiPembayaran = mongoose.Schema({
-    order: {
-        type: Schema.Types.ObjectId,
-        ref: 'Order',
+    pesanan: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DetailPesanan',
         required: true
     },
-    paymentMethod: {
+    asalRekening: {
         type: String,
-        enum: ['credit card', 'paypal', 'bank transfer'],
         required: true
     },
-    paymentDate: {
+    tujuanRekening: {
+        type: String,
+        required: true
+    },
+    tanggalPembayaran: {
         type: Date,
         required: true
     },
-    amount: {
+    jumlah: {
         type: Number,
         required: true
     },
     status: {
         type: String,
-        enum: ['pending', 'confirmed'],
-        default: 'pending'
+        enum: ['tertunda', 'dikonfirmasi'],
+        default: 'tertunda'
     }
 })
 
-konfirmasiPembayaran.virtual('id').get(function () {
-    return this._id.toHexString();
-});
-
-konfirmasiPembayaran.set('toJSON', {
-    virtual: true
-})
 
 exports.KonfirmasiPembayaran = mongoose.model('KonfirmasiPembayaran', konfirmasiPembayaran);

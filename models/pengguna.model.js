@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 // deklarasi schema database produk
-const pembeliSchema = mongoose.Schema({
-    name: {
+const penggunaSchema = mongoose.Schema({
+    nama: {
         type: String,
         required: true
     },
@@ -10,27 +10,18 @@ const pembeliSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    password: {
+    kataSandi: {
         type: String,
         required: true
     },
-    role: {
-        type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
+    isAdmin: {
+        type: Boolean,
+        default: false
     },
-    createdAt: {
+    dibuatPada: {
         type: Date,
         default: Date.now
     }
 })
 
-pembeliSchema.virtual('id').get(function () {
-    return this._id.toHexString();
-});
-
-pembeliSchema.set('toJSON', {
-    virtual: true
-})
-
-exports.Pembeli = mongoose.model('Pembeli', pembeliSchema);
+exports.Pengguna = mongoose.model('Pengguna', penggunaSchema);
