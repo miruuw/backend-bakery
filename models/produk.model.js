@@ -10,6 +10,10 @@ const produkSchema = mongoose.Schema({
         type: Number,
         required: true
     },
+    stok: {
+        type: Number,
+        required: true
+    },
     deskripsi: {
         type: String,
         required: true

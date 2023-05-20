@@ -36,8 +36,8 @@ router.post('/', async (req, res) => {
 
     order = await order.save();
 
-    if(!order)
-    return res.status(404).send('Pemesanan tidak dapat dibuat!')
+    if (!order)
+        return res.status(404).send('Pemesanan tidak dapat dibuat!')
 
     res.send(order);
 })
@@ -45,8 +45,8 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     const orderList = await DetailPesanan.find().populate('pengguna', 'nama').sort('dibuatPada');
 
-    if(!orderList) {
-        res.status(500).json({success: false})
+    if (!orderList) {
+        res.status(500).json({ success: false })
     }
     res.send(orderList);
 })
@@ -55,8 +55,8 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const order = await DetailPesanan.findById(req.params.id).populate('pengguna', 'nama')
 
-    if(!order) {
-        res.status(500).json({success: false})
+    if (!order) {
+        res.status(500).json({ success: false })
     }
     res.send(order);
 })
@@ -64,26 +64,26 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     const order = await DetailPesanan.findByIdAndUpdate(
         req.params.id, {
-            status: req.body.status
-        },
-        { new : true}
+        status: req.body.status
+    },
+        { new: true }
     )
 
-    if(!order)
-    return res.status(400).send('Pesanan tidak dapat diupdate!')
+    if (!order)
+        return res.status(400).send('Pesanan tidak dapat diupdate!')
 
     res.send(order);
 })
 
 router.delete('/:id', (req, res) => {
     DetailPesanan.findByIdAndRemove(req.params.id).then(order => {
-        if(order) {
-            return res.status(200).json({success: true, message: 'data pesanan berhasil dihapus!'})
+        if (order) {
+            return res.status(200).json({ success: true, message: 'data pesanan berhasil dihapus!' })
         } else {
-            return res.status(404).json({success: true, message: 'data pesanan tidak ada!'})
+            return res.status(404).json({ success: true, message: 'data pesanan tidak ada!' })
         }
-    }).catch(err=> {
-        return res.status(400).json({success: false, error: err})
+    }).catch(err => {
+        return res.status(400).json({ success: false, error: err })
     })
 })
 

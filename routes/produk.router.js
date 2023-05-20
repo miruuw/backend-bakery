@@ -6,33 +6,56 @@ const { Produk } = require('../models/produk.model');
 const { Kategori } = require('../models/kategori.model');
 
 
-const FILE_TYPE_MAP = {
-    'image/png': 'png',
-    'image/jpeg': 'jpeg',
-    'image/jpg': 'jpg'
-}
+// const FILE_TYPE_MAP = {
+//     'gambar/png': 'png',
+//     'gambar/jpeg': 'jpeg',
+//     'gambar/jpg': 'jpg'
+// }
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const isValid = FILE_TYPE_MAP[file.mimetype];
-        let uploadError = new Error('invalid image type');
-
-        if (isValid) {
-            uploadError = null
-        }
-        cb(uploadError, 'public/uploads')
+      cb(null, 'public/uploads');
     },
     filename: function (req, file, cb) {
-        const fileName = file.originalname.split(' ').join('-');
-        const extenstion = FILE_TYPE_MAP[file.mimetype];
-        cb(null, `${fileName}-${Date.now()}.${extenstion}`)
+      const fileName = file.originalname.split(' ').join('-');
+      cb(null, `${fileName}-${Date.now()}`);
     }
-})
+  });
 
-const uploadOptions = multer({ storage: storage })
+const fileFilter = (req, file, cb) => {
+    if (
+      file.mimetype === 'image/jpeg' ||
+      file.mimetype === 'image/png' ||
+      file.mimetype === 'image/jpg'
+    ) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type'), false);
+    }
+  };
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         const isValid = FILE_TYPE_MAP[file.mimetype];
+//         let uploadError = new Error('Tipe gambar / image tidak valid');
+
+//         if (isValid) {
+//             uploadError = null
+//         }
+//         cb(uploadError, 'public/uploads')
+//     },
+//     filename: function (req, file, cb) {
+//         const fileName = file.originalname.split(' ').join('-');
+//         const extenstion = FILE_TYPE_MAP[file.mimetype];
+//         cb(null, `${fileName}-${Date.now()}.${extenstion}`)
+//     }
+// })
+
+// const uploadOptions = multer({ storage: storage })
 
 router.get(`/`, async (req, res) => {
-    // exp : localhost:8080/bc-bakery/v1/produk
+    // contoh : localhost:8080/bc-bakery/v1/produk
     let filter = {};
     if (req.query.kategories) {
         filter = { kategori: req.kategories.split(',') }
@@ -56,34 +79,70 @@ router.get(`/:id`, async (req, res) => {
     res.send(produk);
 })
 
-router.post(`/`, uploadOptions.single('gambar'), async (req, res) => {
-    const kategori = await Kategori.findById(req.body.kategori);
-    if (!kategori) return res.status(400).send('Kategori tidak valid!');
+// router.post(`/`, upload.single('gambar'), async (req, res) => {
+//     const kategori = await Kategori.findById(req.body.kategori);
+//     if (!kategori) return res.status(400).send('Kategori tidak valid!');
 
+//     const file = req.file;
+//     if (!file) return res.status(400).send('Tidak ada gambar/image di dalam request!');
+
+//     const fileName = req.file.filename;
+//     const basePath = `${req.protocol}://${req.get('host')}/public/upload/`;
+
+//     const produk = new Produk({
+//         nama: req.body.nama,
+//         harga: req.body.harga,
+//         stok: req.body.stok,
+//         deskripsi: req.body.deskripsi,
+//         gambar: `${basePath}${fileName}`,
+//         kategori: req.body.kategori,
+//     });
+
+//     produk = await produk.save();
+
+//     if (!produk)
+//         return res.status(500).send('Produk tidak dapat dibuat!');
+
+//     res.send(produk);
+
+// })
+
+router.post('/', upload.single('gambar'), async (req, res) => {
+    const { nama, harga, stok, deskripsi, kategori } = req.body;
     const file = req.file;
-    if (!file) return res.status(400).send('Tidak ada gambar/image di dalam request!');
+  
+    try {
+      const kategoriObj = await Kategori.findById(kategori);
+      if (!kategoriObj) {
+        return res.status(400).send('Invalid category!');
+      }
+  
+      if (!file) {
+        return res.status(400).send('No image file provided!');
+      }
+  
+      const imagePath = `public/uploads/${file.filename}`;
+      
+      const produk = new Produk({
+        nama,
+        harga,
+        stok,
+        deskripsi,
+        gambar: imagePath,
+        kategori: kategoriObj
+      });
+  
+      const savedProduk = await produk.save();
+      res.send(savedProduk);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Failed to create a product!');
+    }
+  });
+  
 
-    const fileName = req.file.filename;
-    const basePath = `${req.protocol}://${req.get('host')}/public/upload/`;
 
-    const produk = new Produk({
-        nama: req.body.nama,
-        harga: req.body.harga,
-        deskripsi: req.body.deskripsi,
-        gambar: `${basePath}${fileName}`,
-        kategori: req.body.kategori,
-    });
-
-    produk = await produk.save();
-
-    if (!produk)
-        return res.status(500).send('Produk tidak dapat dibuat!');
-
-    res.send(produk);
-
-})
-
-router.put('/:id', uploadOptions.single('gambar'), async (req, res) => {
+router.put('/:id', upload.single('gambar'), async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) {
         res.status(400).send('ID Produk tidak valid!');
         return;
@@ -104,6 +163,7 @@ router.put('/:id', uploadOptions.single('gambar'), async (req, res) => {
         {
             nama: req.body.nama,
             harga: req.body.harga,
+            stok: req.body.stok,
             deskripsi: req.body.deskripsi,
             gambar: file ? `${basePath}${fileName}` : req.body.gambar,
             kategori: req.body.kategori
