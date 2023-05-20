@@ -1,0 +1,65 @@
+1. Halaman Utama (Home Page):
+    - Header: Navigasi, Logo
+    - Carousel: Menampilkan gambar-gambar produk atau penawaran spesial
+    - Daftar Produk Terbaru: Menampilkan daftar produk terbaru
+    - Footer: Informasi kontak dan tautan sosial media
+
+2. Halaman Daftar Produk (Product Listing Page):
+    - Header: Navigasi, Logo
+    - Sidebar: Kategori-kategori produk
+    - Daftar Produk: Menampilkan produk-produk dalam kategori yang dipilih
+    - Footer: Informasi kontak dan tautan sosial media
+
+3. Halaman Detail Produk (Product Detail Page):
+    - Header: Navigasi, Logo
+    - Detail Produk: Gambar, Nama, Harga, Deskripsi, Stok
+    - Tombol "Tambah ke Keranjang": Untuk menambahkan produk ke keranjang belanja
+    - Footer: Informasi kontak dan tautan sosial media
+
+4. Halaman Keranjang Belanja (Shopping Cart Page):  
+    - Header: Navigasi, Logo
+    - Daftar Produk dalam Keranjang: Menampilkan produk yang telah ditambahkan ke keranjang beserta jumlah dan subtotal
+    - Total Harga: Menampilkan total harga dari semua produk dalam keranjang
+    - Form Pengiriman: Alamat Pengiriman, Nomor Telepon, Kota
+    - Tombol "Pesan Sekarang": Untuk melakukan pemesanan produk
+    - Footer: Informasi kontak dan tautan sosial media
+
+5. Halaman Konfirmasi Pesanan (Order Confirmation Page):
+    - Header: Navigasi, Logo
+    - Detail Pesanan: Daftar produk yang dipesan beserta jumlah dan subtotal
+    - Total Harga: Menampilkan total harga pesanan
+    - Informasi Pembayaran: Instruksi transfer, nomor rekening tujuan
+    - Form Konfirmasi Pembayaran: Asal Rekening, Tujuan Rekening, Tanggal Pembayaran, Jumlah Transfer
+    - Tombol "Konfirmasi Pembayaran": Untuk mengirim konfirmasi pembayaran
+    - Footer: Informasi kontak dan tautan sosial media
+
+6. Halaman Riwayat Pesanan (Order History Page):
+    - Header: Navigasi, Logo
+    - Daftar Pesanan: Menampilkan riwayat pesanan yang telah dilakukan beserta detailnya (produk, tanggal, jumlah, status)
+    - Footer: Informasi kontak dan tautan sosial media
+
+7. Halaman Login:
+    - Header: Navigasi, Logo
+    - Form Login: Email, Kata Sandi
+    - Tombol "Login": Untuk masuk ke akun pengguna
+    - Tautan "Daftar Akun": Untuk mendaftar akun baru
+    - Footer: Informasi kontak dan tautan sosial media
+
+8. Halaman Pendaftaran Akun (Sign Up Page):
+    - Header: Navigasi, Logo
+    - Form Pendaftaran: Nama, Email, Kata Sandi
+    - Tombol "Daftar": Untuk membuat akun baru
+    - Footer: Informasi kontak dan tautan sosial media
+
+9. Halaman Profil Pengguna (User Profile Page):
+    - Header: Navigasi, Logo
+    - Informasi Profil: Nama, Email, Alamat Pengiriman, Nomor Telepon
+    - Tombol "Edit Profil": Untuk mengedit informasi profil pengguna
+    - Daftar Pesanan Terakhir: Menampilkan pesanan-pesanan terakhir yang dilakukan oleh pengguna
+    - Footer: Informasi kontak dan tautan sosial media
+
+10. Halaman Admin (Admin Dashboard):
+    - Header: Navigasi, Logo
+    - Sidebar: Menu navigasi untuk mengelola produk, kategori, pesanan, pengguna, dsb.
+    - Tampilan Konten: Berisi tampilan untuk mengelola data, misalnya menambahkan produk, mengedit kategori, mengelola pesanan, dsb.
+    - Footer: Informasi kontak dan tautan sosial media
