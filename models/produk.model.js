@@ -27,6 +27,10 @@ const produkSchema = mongoose.Schema({
         ref: 'KategoriProduk', 
         required: true
     },
+    isFeatured: {
+        type: Boolean,
+        default: false
+    },
     dibuatPada: {
         type: Date,
         default: Date.now

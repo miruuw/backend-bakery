@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 // deklarasi schema database order
 const orderSchema = mongoose.Schema({
-    product: {
+    produk: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Produk'
     },
@@ -10,7 +10,6 @@ const orderSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-   
 })
 
 

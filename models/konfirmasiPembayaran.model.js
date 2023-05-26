@@ -7,26 +7,27 @@ const konfirmasiPembayaran = mongoose.Schema({
         ref: 'DetailPesanan',
         required: true
     },
-    asalRekening: {
+    metodePembayaran: {
+        type: String,
+        required: true,
+        enum: ['Transfer Bank', 'OVO', 'GoPay', 'Dana']
+    },
+    nomorRekening: {
         type: String,
         required: true
     },
-    tujuanRekening: {
+    buktiPembayaran: {
         type: String,
         required: true
     },
     tanggalPembayaran: {
         type: Date,
-        required: true
-    },
-    jumlah: {
-        type: Number,
-        required: true
+        default: Date.now
     },
     status: {
         type: String,
-        enum: ['tertunda', 'dikonfirmasi'],
-        default: 'tertunda'
+        required: true,
+        enum: ['Menunggu Konfirmasi', 'Dikonfirmasi', 'Ditolak']
     }
 })
 

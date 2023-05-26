@@ -4,7 +4,7 @@ const router = express.Router();
 const multer = require('multer');
 const { Produk } = require('../models/produk.model');
 const { Kategori } = require('../models/kategori.model');
-
+const fs = require('fs');
 
 // const FILE_TYPE_MAP = {
 //     'gambar/png': 'png',
@@ -14,7 +14,7 @@ const { Kategori } = require('../models/kategori.model');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'public/uploads');
+      cb(null, 'asset/products');
     },
     filename: function (req, file, cb) {
       const fileName = file.originalname.split(' ').join('-');
@@ -121,7 +121,7 @@ router.post('/', upload.single('gambar'), async (req, res) => {
         return res.status(400).send('No image file provided!');
       }
   
-      const imagePath = `public/uploads/${file.filename}`;
+      const imagePath = `asset/products/${file.filename}`;
       
       const produk = new Produk({
         nama,
@@ -129,7 +129,8 @@ router.post('/', upload.single('gambar'), async (req, res) => {
         stok,
         deskripsi,
         gambar: imagePath,
-        kategori: kategoriObj
+        kategori: kategoriObj,
+        isFeatured
       });
   
       const savedProduk = await produk.save();
@@ -156,7 +157,7 @@ router.put('/:id', upload.single('gambar'), async (req, res) => {
 
     const file = req.file;
     const fileName = file ? req.file.filename : null;
-    const basePath = `${req.protocol}://${req.get('host')}/public/upload/`;
+    const basePath = `${req.protocol}://${req.get('host')}/asset/products/`;
 
     const produk = await Produk.findByIdAndUpdate(
         req.params.id,
@@ -166,7 +167,8 @@ router.put('/:id', upload.single('gambar'), async (req, res) => {
             stok: req.body.stok,
             deskripsi: req.body.deskripsi,
             gambar: file ? `${basePath}${fileName}` : req.body.gambar,
-            kategori: req.body.kategori
+            kategori: req.body.kategori,
+            isFeatured: req.body.isFeatured
         },
         { new: true }
     );
@@ -179,16 +181,35 @@ router.put('/:id', upload.single('gambar'), async (req, res) => {
     res.send(produk);
 });
 
-router.delete('/:id', (req, res) => {
-    Produk.findByIdAndRemove(req.params.id).then(produk => {
-        if (produk) {
-            return res.status(200).json({ success: true, message: 'produk berhasil dihapus!' })
-        } else {
-            return res.status(404).json({ success: true, message: 'produk tidak ada!' })
-        }
-    }).catch(err => {
-        return res.status(400).json({ success: false, error: err })
-    })
-})
+// router.delete('/:id', (req, res) => {
+//     Produk.findByIdAndRemove(req.params.id).then(produk => {
+//         if (produk) {
+//             return res.status(200).json({ success: true, message: 'produk berhasil dihapus!' })
+//         } else {
+//             return res.status(404).json({ success: true, message: 'produk tidak ada!' })
+//         }
+//     }).catch(err => {
+//         return res.status(400).json({ success: false, error: err })
+//     })
+// })
+
+router.delete('/:id', async (req, res) => {
+  try {
+      const produk = await Produk.findById(req.params.id);
+      if (!produk) {
+          return res.status(404).json({ success: false, message: 'Produk tidak ditemukan!' });
+      }
+
+      // Hapus gambar dari file jika ada
+      if (produk.gambar) {
+          fs.unlinkSync(produk.gambar);
+      }
+
+      await Produk.findByIdAndRemove(req.params.id);
+      return res.status(200).json({ success: true, message: 'Produk berhasil dihapus!' });
+  } catch (error) {
+      return res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 module.exports = router; 

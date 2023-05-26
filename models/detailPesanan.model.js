@@ -28,9 +28,10 @@ const detailOrderSchema = mongoose.Schema({
         // enum: ['tertunda', 'dikirim', 'terkirim'],
         default: 'tertunda'
     },
-    // totalPrice: {
-    //     type: Number,
-    // },
+    totalPrice: {
+        type: Number,
+        default: 0
+    },
     pengguna: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Pengguna',

@@ -5,7 +5,7 @@ const kategorySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    deskripsi: {
+    gambar: {
         type: String,
         required: true
     }
