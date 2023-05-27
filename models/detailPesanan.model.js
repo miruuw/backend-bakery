@@ -25,8 +25,8 @@ const detailOrderSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        // enum: ['tertunda', 'dikirim', 'terkirim'],
-        default: 'tertunda'
+        enum: ['diproses', 'dikirim', 'terkirim'],
+        default: 'diproses'
     },
     totalPrice: {
         type: Number,

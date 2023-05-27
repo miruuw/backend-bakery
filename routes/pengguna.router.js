@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     try {
-        const { nama, email, kataSandi, isAdmin } = req.body;
+        const { nama, email, kataSandi } = req.body;
     
         // Menghash kata sandi menggunakan bcrypt
         const hashedKataSandi = await bcrypt.hash(kataSandi, 10);
@@ -33,8 +33,7 @@ router.post('/', async (req, res) => {
         const pengguna = new Pengguna({
           nama,
           email,
-          kataSandi: hashedKataSandi,
-          isAdmin,
+          kataSandi: hashedKataSandi
         });
     
         // Menyimpan pengguna ke dalam database

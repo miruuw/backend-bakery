@@ -26,8 +26,8 @@ const konfirmasiPembayaran = mongoose.Schema({
     },
     status: {
         type: String,
-        required: true,
-        enum: ['Menunggu Konfirmasi', 'Dikonfirmasi', 'Ditolak']
+        enum: ['Menunggu Konfirmasi', 'Dikonfirmasi', 'Ditolak'],
+        default: 'Menunggu Konfirmasi'
     }
 })
 

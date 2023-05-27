@@ -13,6 +13,11 @@ app.options('*', cors());
 // deklarasi middleware 
 app.use(bodyParser.json());
 app.use(morgan('tiny'));
+// mengizinkan mengakses direktori
+app.use('/asset/categories', express.static(__dirname + '/asset/categories'));
+app.use('/asset/payments', express.static(__dirname + '/asset/payments'));
+app.use('/asset/products', express.static(__dirname + '/asset/products'));
+// pesan error jika express tidak berjalan
 app.use((err, req, res, next) => {
     if (err) {
         res.status(500).json({message: err})

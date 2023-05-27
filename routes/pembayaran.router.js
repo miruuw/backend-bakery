@@ -1,43 +1,59 @@
 const express = require('express');
 const router = express.Router();
 const { KonfirmasiPembayaran } = require('../models/konfirmasiPembayaran.model');
+const { DetailPesanan } = require('../models/detailPesanan.model');
 const multer = require('multer');
 const fs = require('fs');
 
+const FILE_TYPE_MAP = {
+  'image/png': 'png',
+  'image/jpeg': 'jpeg',
+  'image/jpg': 'jpg'
+}
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'asset/payments');
+      const isValid = FILE_TYPE_MAP[file.mimetype];
+      let uploadError = new Error('Tipe Gambar tidak valid!');
+
+      if (isValid) {
+          uploadError = null
+      }
+      cb(uploadError, 'asset/payments')
   },
   filename: function (req, file, cb) {
-    const fileName = file.originalname.split(' ').join('-');
-    cb(null, `${fileName}-${Date.now()}`);
+      const fileName = file.originalname.split(' ').join('-');
+      const extenstion = FILE_TYPE_MAP[file.mimetype];
+      cb(null, `${fileName}`)
+      // dengan filename asli tidak di hash / tambah char
   }
-});
+})
 
-const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === 'image/jpeg' ||
-    file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jpg'
-  ) {
-    cb(null, true);
-  } else {
-    cb(new Error('Invalid file type'), false);
-  }
-};
+const upload = multer({ storage: storage })
 
-const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.post('/', upload.single('buktiPembayaran'), async (req, res) => {
   try {
     const { pesanan, metodePembayaran, nomorRekening, status } = req.body;
-    const buktiPembayaran = req.file.path;
+    const file = req.file;
+
+    const pesananObj = await DetailPesanan.findById(pesanan);
+    if (!pesananObj) {
+      return res.status(400).send('Pesanan tidak valid!');
+    }
+
+    if (!file) {
+      return res.status(400).send('Tidak ada file gambar yang disediakan!');
+    }
+
+    const fileName = req.file.filename;
+    const basePath = `${req.protocol}://${req.get('host')}/asset/payments/`;
 
     const konfirmasiPembayaran = new KonfirmasiPembayaran({
       pesanan,
       metodePembayaran,
       nomorRekening,
-      buktiPembayaran,
+      buktiPembayaran : `${basePath}${fileName}`,
       status,
     });
 
